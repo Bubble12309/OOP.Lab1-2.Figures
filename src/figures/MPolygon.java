@@ -1,0 +1,40 @@
+package figures;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MPolygon extends AreaFigure {
+
+    public MPolygon(Color fill, Point p1, Point p2, Point... varPoints) {
+        super(fill);
+        setPointsRequired(Figure.POINTS_MANY);
+        ArrayList<Point> points = this.getPoints();
+        points.add(p1);
+        points.add(p2);
+        points.addAll(Arrays.asList(varPoints));
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(this.getFill());
+        ArrayList<Point> points = this.getPoints();
+        int size = points.size();
+        int[] x = new int[size];
+        int[] y = new int[size];
+        for (int i = 0; i < size; i++) {
+            x[i] = points.get(i).x;
+            y[i] = points.get(i).y;
+        }
+        g2d.setStroke(new BasicStroke(1.0f));
+        g2d.drawPolygon(x, y, size);
+        g2d.fillPolygon(x, y, size);
+    }
+
+    @Override
+    public void recalculate(Point newPoint) {
+        var points = this.getPoints();
+        points.set(points.size() - 1, newPoint);
+    }
+}
